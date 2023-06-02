@@ -2,6 +2,9 @@
 
 Parse and verify JSON Web Tokens.
 
+## Cloned
+This was cloned from malinoff/elm-jwt to fix the broken dependency on ivadzy/bbase64
+
 ## Scope
 
 The general plan is to have a fully RFC compliant, robust and reliable library that can parse, build, and verify
