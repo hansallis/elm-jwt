@@ -1,7 +1,7 @@
 module JWT exposing
     ( JWT(..), DecodeError(..), fromString
     , VerificationError(..), isValid, validate
-    )
+    , TimeRelatedVerificationError(..))
 
 {-|
 
@@ -64,6 +64,26 @@ fromString string =
 type VerificationError
     = JWSVerificationError JWS.VerificationError
 
+{-| Error specific to time constraints in the claimset
+-}
+type TimeRelatedVerificationError
+    = NotYetValid
+    | Expired
+    | NotYetIssued
+
+{-| Check if a verification error relates to the time constraints in the claimset.
+-}
+isErrorTimeRelated : VerificationError -> Maybe TimeRelatedVerificationError
+isErrorTimeRelated error =
+    case error of
+        JWSVerificationError (JWS.ClaimSet JWT.ClaimSet.NotYetValid) ->
+            Just NotYetValid
+        JWSVerificationError (JWS.ClaimSet JWT.ClaimSet.Expired) ->
+            Just Expired
+        JWSVerificationError (JWS.ClaimSet JWT.ClaimSet.NotYetIssued) ->
+            Just NotYetIssued
+        _ ->
+            Nothing
 
 {-| Check if the token is valid.
 -}
