@@ -1,7 +1,7 @@
 module JWT exposing
     ( JWT(..), DecodeError(..), fromString
     , VerificationError(..), isValid, validate
-    , TimeRelatedVerificationError(..))
+    , TimeConstraintError(..))
 
 {-|
 
@@ -13,7 +13,7 @@ module JWT exposing
 
 # Verification
 
-@docs VerificationError, isValid, validate
+@docs TimeConstraintError, VerificationError, getTimeConstraintError, isValid, validate
 
 -}
 
@@ -66,15 +66,15 @@ type VerificationError
 
 {-| Error specific to time constraints in the claimset
 -}
-type TimeRelatedVerificationError
+type TimeConstraintError
     = NotYetValid
     | Expired
     | NotYetIssued
 
 {-| Check if a verification error relates to the time constraints in the claimset.
 -}
-isErrorTimeRelated : VerificationError -> Maybe TimeRelatedVerificationError
-isErrorTimeRelated error =
+getTimeConstraintError : VerificationError -> Maybe TimeConstraintError
+getTimeConstraintError error =
     case error of
         JWSVerificationError (JWS.ClaimSet JWT.ClaimSet.NotYetValid) ->
             Just NotYetValid
