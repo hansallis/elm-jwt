@@ -1,7 +1,7 @@
 module JWT exposing
     ( JWT(..), DecodeError(..), fromString
     , VerificationError(..), isValid, validate
-    , TimeConstraintError(..))
+    , TimeConstraintError(..), getTimeConstraintError)
 
 {-|
 
